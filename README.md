@@ -59,7 +59,7 @@ O build gera `public/v1/index.htm`, páginas internas em `.htm`, copia arquivos 
 
 ### Tema personalizado
 
-`themePath` aceita o diretório de um tema que contém `docs-layout.e.htm` ou o caminho de um arquivo de template Eta. Quando `null` ou omitido, usa `themes/default` do próprio pacote.
+`themePath` aceita o diretório de um tema que contém `docs-layout.eta.htm` ou o caminho de um arquivo de template Eta. Quando `null` ou omitido, usa `themes/default` do próprio pacote.
 
 ```js
 await buildDocs({

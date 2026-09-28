@@ -40,7 +40,7 @@ test("generate accepts a custom template file", async () => {
   const root = await fsp.mkdtemp(path.join(os.tmpdir(), "docweaver-theme-"));
   try {
     const docsPath = path.join(root, "docs");
-    const template = path.join(root, "custom.e.htm");
+    const template = path.join(root, "custom.eta.htm");
     await fsp.mkdir(path.join(docsPath, "v1"), { recursive: true });
     await fsp.writeFile(path.join(docsPath, "v1", "README.md"), "# Custom");
     await fsp.writeFile(path.join(docsPath, "v1", "summary.json"), JSON.stringify({ summary: [] }));

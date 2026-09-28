@@ -9,7 +9,7 @@ const defaultTheme = fileURLToPath(new URL("../themes/default/", import.meta.url
 
 export function resolveTemplate(themePath = null) {
   const selected = themePath == null ? defaultTheme : path.resolve(themePath);
-  return /\.(?:e\.htm|eta|html?)$/i.test(selected) ? selected : path.join(selected, "docs-layout.e.htm");
+  return /\.(?:eta\.htm|eta|html?)$/i.test(selected) ? selected : path.join(selected, "docs-layout.eta.htm");
 }
 
 function formatXML(url, item) {
