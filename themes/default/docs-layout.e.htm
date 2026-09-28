@@ -11,47 +11,49 @@
 
   <%~ include("./seo-head.e.htm") %>
 
-  <link rel="icon" type="image/svg+xml" sizes="any" href="/favicon/favicon.svg">
-  <link rel="icon" type="image/icon" sizes="any" href="/favicon/favicon.ico">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="/favicon/android-chrome-192x192.png">
-  <link rel="icon" type="image/png" sizes="512x512" href="/favicon/android-chrome-512x512.png">
-  <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/svg+xml" sizes="any" href="<%= it.outputPath %>/favicon/favicon.svg">
+    <link rel="icon" type="image/icon" sizes="any" href="<%= it.outputPath %>/favicon/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="<%= it.outputPath %>/favicon/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="<%= it.outputPath %>/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="<%= it.outputPath %>/favicon/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="<%= it.outputPath %>/favicon/android-chrome-512x512.png">
+    <link rel="apple-touch-icon" type="image/png" sizes="180x180"
+      href="<%= it.outputPath %>/favicon/apple-touch-icon.png">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500&display=swap" rel="stylesheet">
 
-  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.32.2/tocbot.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/css/bootstrap.min.css">
-  <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.32.2/tocbot.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/css/bootstrap.min.css">
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
 
-  <link rel="stylesheet" href="<%= it.outputPath %>/css/inline-style.css">
+    <link rel="stylesheet" href="<%= it.outputPath %>/css/inline-style.css">
 
-  <script>
-    function closeNavbar(bsToggler) {
-      const targetSelector = bsToggler.getAttribute('data-bs-target') || navbarToggler.getAttribute('aria-controls');
-      const bsCollapse = document.querySelector(targetSelector);
+    <script>
+      function closeNavbar(bsToggler) {
+        const targetSelector = bsToggler.getAttribute('data-bs-target') || navbarToggler.getAttribute('aria-controls');
+        const bsCollapse = document.querySelector(targetSelector);
 
-      // 2. If open, remove the 'show' class to hide it
-      if (bsCollapse.classList.contains('show')) {
-        bsCollapse.classList.remove('show');
-        // 3. Update ARIA state to false
-        bsToggler.setAttribute('aria-expanded', 'false');
+        // 2. If open, remove the 'show' class to hide it
+        if (bsCollapse.classList.contains('show')) {
+          bsCollapse.classList.remove('show');
+          // 3. Update ARIA state to false
+          bsToggler.setAttribute('aria-expanded', 'false');
+        }
       }
-    }
-    window.addEventListener("click", (e) => {
-      const link = event.target.closest("a[href]");
-      const any = event.target.closest("[data-bs-toggle][data-bs-continue]");
-      if (any && !link) return;
-      const el = document.querySelector("[data-bs-toggle][data-bs-autohide=true][aria-expanded=true]");
-      if (el) closeNavbar(el);
-    });
-  </script>
+      window.addEventListener("click", (e) => {
+        const link = event.target.closest("a[href]");
+        const any = event.target.closest("[data-bs-toggle][data-bs-continue]");
+        if (any && !link) return;
+        const el = document.querySelector("[data-bs-toggle][data-bs-autohide=true][aria-expanded=true]");
+        if (el) closeNavbar(el);
+      });
+    </script>
 </head>
 
 <body>
@@ -64,11 +66,9 @@
         <div class="me-auto d-flex flex-row gap-2 align-items-center">
 
           <a class="navbar-brand m-0 me-auto p-0 lh-1 fw-medium d-flex align-items-center"
-            href="https://ehecoatl.com.br/"
-            style="font-size:1.5em;letter-spacing:-0.03em;word-spacing: -.2em; min-width: 130px; color:inherit;height:35px;">
-            <svg height="50" width="130" class="d-inline-block position-absolute">
-              <use href="#ehecoatl-namebrand"></use>
-            </svg>
+            href="/<%= it.version %>/index.htm"
+            style="font-size:1.5em;letter-spacing:-0.03em;word-spacing: -.2em; color:inherit;">
+            <%= it.title %>
           </a>
 
         </div>
@@ -81,96 +81,98 @@
 
               <%~ include("./versions-menu.e.htm") %>
 
-              <div class="btn-group border rounded-pill rounded overflow-hidden" style="gap:1px;" role="group"
-                aria-label="Basic example">
-                <input type="radio" class="btn-check" name="color-mode-selected" id="radio-color-mode-light"
-                  autocomplete="off" aria-label="Light Mode">
-                <label
-                  class="btn btn-sm btn-outline-adaptive py-1 border-0 d-inline-flex justify-content-center align-items-center"
-                  for="radio-color-mode-light" onclick aria-label="Light Mode">
-                  <i class="bi bi-sun"></i>
-                  <span class="visually-hidden">Light Mode</span>
-                </label>
+                <div class="btn-group border rounded-pill rounded overflow-hidden" style="gap:1px;" role="group"
+                  aria-label="Basic example">
+                  <input type="radio" class="btn-check" name="color-mode-selected" id="radio-color-mode-light"
+                    autocomplete="off" aria-label="Light Mode">
+                  <label
+                    class="btn btn-sm btn-outline-adaptive py-1 border-0 d-inline-flex justify-content-center align-items-center"
+                    for="radio-color-mode-light" onclick aria-label="Light Mode">
+                    <i class="bi bi-sun"></i>
+                    <span class="visually-hidden">Light Mode</span>
+                  </label>
 
-                <input type="radio" class="btn-check" name="color-mode-selected" id="radio-color-mode-dark"
-                  autocomplete="off" aria-label="Dark Mode">
-                <label
-                  class="btn btn-sm btn-outline-adaptive py-1 border-0  d-inline-flex justify-content-center align-items-center"
-                  for="radio-color-mode-dark" onclick aria-label="Dark Mode">
-                  <i class="bi bi-moon-fill"></i>
-                  <span class="visually-hidden">Dark Mode</span>
-                </label>
+                  <input type="radio" class="btn-check" name="color-mode-selected" id="radio-color-mode-dark"
+                    autocomplete="off" aria-label="Dark Mode">
+                  <label
+                    class="btn btn-sm btn-outline-adaptive py-1 border-0  d-inline-flex justify-content-center align-items-center"
+                    for="radio-color-mode-dark" onclick aria-label="Dark Mode">
+                    <i class="bi bi-moon-fill"></i>
+                    <span class="visually-hidden">Dark Mode</span>
+                  </label>
 
-                <input type="radio" class="btn-check" name="color-mode-selected" id="radio-color-mode-auto"
-                  autocomplete="off" aria-label="Auto Mode">
-                <label
-                  class="btn btn-sm btn-outline-adaptive py-1 border-0 d-inline-flex justify-content-center align-items-center"
-                  for="radio-color-mode-auto" onclick aria-label="Auto Mode">
-                  <i class="bi bi-circle-half"></i>
-                  <span class="visually-hidden">Auto Mode</span>
-                </label>
-              </div>
+                  <input type="radio" class="btn-check" name="color-mode-selected" id="radio-color-mode-auto"
+                    autocomplete="off" aria-label="Auto Mode">
+                  <label
+                    class="btn btn-sm btn-outline-adaptive py-1 border-0 d-inline-flex justify-content-center align-items-center"
+                    for="radio-color-mode-auto" onclick aria-label="Auto Mode">
+                    <i class="bi bi-circle-half"></i>
+                    <span class="visually-hidden">Auto Mode</span>
+                  </label>
+                </div>
 
             </div>
 
             <% for (const item of it.menuTree) { %>
-            <li class="nav-item small-md fw-bold rounded-pill ps-md-1 bg-light-adaptive" style="flex:0">
-              <a class="nav-link text-capitalize p-2 p-md-1 px-3 px-md-2" data-bs-continue=true
-                data-bs-toggle="collapse" data-bs-target="#children-<%= item.slug %>">
-                <%= item.label %>
-                <% if (item.children !== undefined) { %><span class="chevron"><i
-                    class="bi bi-chevron-right small"></i></span><% } %>
-              </a>
-            </li>
+              <li class="nav-item small-md fw-bold rounded-pill ps-md-1 bg-light-adaptive" style="flex:0">
+                <a class="nav-link text-capitalize p-2 p-md-1 px-3 px-md-2" data-bs-continue=true
+                  data-bs-toggle="collapse" data-bs-target="#children-<%= item.slug %>">
+                  <%= item.label %>
+                    <% if (item.children !==undefined) { %><span class="chevron"><i
+                          class="bi bi-chevron-right small"></i></span>
+                      <% } %>
+                </a>
+              </li>
 
-            <% if (item.children !== undefined && item.children.length) { %>
-            <div id="children-<%= item.slug %>" class="collapse border-start ms-2 <% if (item.active) { %> show <% } %>"
-              data-bs-parent="#navbarSupportedContent">
-              <div class="ps-2 gap-1 d-flex flex-column ">
-                <% for (const child of item.children) { %>
-                <% if (child.children !== undefined && child.children.length) { %>
-
-                <li class="nav-item small-md fw-bold rounded-pill ps-md-1 bg-light-adaptive" style="flex:0">
-                  <a class="nav-link text-capitalize p-2 p-md-1 px-3 px-md-2" data-bs-continue=true
-                    data-bs-toggle="collapse" data-bs-target="#children2-<%= child.slug %>">
-                    <%= child.label %>
-                    <% if (child.children !== undefined) { %><span class="chevron"><i
-                        class="bi bi-chevron-right small"></i></span><% } %>
-                  </a>
-                </li>
-
-                <div id="children2-<%= child.slug %>" class="collapse border-start ms-2 <% if (child.active) { %> show <% } %>"
-                  data-bs-parent="#children-<%= item.slug %>">
+              <% if (item.children !==undefined && item.children.length) { %>
+                <div id="children-<%= item.slug %>"
+                  class="collapse border-start ms-2 <% if (item.active) { %> show <% } %>"
+                  data-bs-parent="#navbarSupportedContent">
                   <div class="ps-2 gap-1 d-flex flex-column ">
-                    <% for (const child2 of child.children) { %>
-                    <li class="nav-item small-md rounded-pill ps-md-1 <% if (child2.active) { %> active <% } %>" style="flex:0">
-                      <a class="nav-link text-capitalize p-2 p-md-1 px-3 px-md-2" href="<%= child2.href %>">
-                        <%= child2.label %>
-                      </a>
-                    </li>
-                    <% } %>
+                    <% for (const child of item.children) { %>
+                      <% if (child.children !==undefined && child.children.length) { %>
+
+                        <li class="nav-item small-md fw-bold rounded-pill ps-md-1 bg-light-adaptive" style="flex:0">
+                          <a class="nav-link text-capitalize p-2 p-md-1 px-3 px-md-2" data-bs-continue=true
+                            data-bs-toggle="collapse" data-bs-target="#children2-<%= child.slug %>">
+                            <%= child.label %>
+                              <% if (child.children !==undefined) { %><span class="chevron"><i
+                                    class="bi bi-chevron-right small"></i></span>
+                                <% } %>
+                          </a>
+                        </li>
+
+                        <div id="children2-<%= child.slug %>"
+                          class="collapse border-start ms-2 <% if (child.active) { %> show <% } %>"
+                          data-bs-parent="#children-<%= item.slug %>">
+                          <div class="ps-2 gap-1 d-flex flex-column ">
+                            <% for (const child2 of child.children) { %>
+                              <li
+                                class="nav-item small-md rounded-pill ps-md-1 <% if (child2.active) { %> active <% } %>"
+                                style="flex:0">
+                                <a class="nav-link text-capitalize p-2 p-md-1 px-3 px-md-2" href="<%= child2.href %>">
+                                  <%= child2.label %>
+                                </a>
+                              </li>
+                              <% } %>
+                          </div>
+                        </div>
+                        <% } else { %>
+                          <li class="nav-item small-md rounded-pill ps-md-1 <% if (child.active) { %> active <% } %>"
+                            style="flex:0">
+                            <a class="nav-link text-capitalize p-2 p-md-1 px-3 px-md-2" href="<%= child.href %>">
+                              <%= child.label %>
+                            </a>
+                          </li>
+                          <% } %>
+                            <% } %>
                   </div>
                 </div>
-                <% } else { %>
-                <li class="nav-item small-md rounded-pill ps-md-1 <% if (child.active) { %> active <% } %>" style="flex:0">
-                  <a class="nav-link text-capitalize p-2 p-md-1 px-3 px-md-2" href="<%= child.href %>">
-                    <%= child.label %>
-                  </a>
-                </li>
                 <% } %>
-                <% } %>
-              </div>
-            </div>
-            <% } %>
-            <% } %>
+                  <% } %>
 
           </ul>
         </div>
-
-        <a href="https://github.com/ehecoatl" target="_blank" rel="noopener noreferrer"
-          class=" btn btn-warning rounded-squircle p-1 btn-lg" style="aspect-ratio: 1;">
-          <i class="bi bi-github"></i>
-        </a>
 
         <button class="navbar-toggler" type="button" data-bs-autohide="true" data-bs-toggle="collapse"
           data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -224,18 +226,18 @@
           <ol class="breadcrumb flex-nowrap">
 
             <% for (const item of it.breadcrumb) { %>
-            <% if (item.href) { %>
-            <li class="breadcrumb-item text-capitalize text-nowrap flex-shrink-0">
-              <a href="<%= item.href %>">
-                <%= item.label %>
-              </a>
-            </li>
-            <% } else { %>
-            <li class="breadcrumb-item text-capitalize text-nowrap flex-shrink-0">
-              <%= item.label %>
-            </li>
-            <% } %>
-            <% } %>
+              <% if (item.href) { %>
+                <li class="breadcrumb-item text-capitalize text-nowrap flex-shrink-0">
+                  <a href="<%= item.href %>">
+                    <%= item.label %>
+                  </a>
+                </li>
+                <% } else { %>
+                  <li class="breadcrumb-item text-capitalize text-nowrap flex-shrink-0">
+                    <%= item.label %>
+                  </li>
+                  <% } %>
+                    <% } %>
 
           </ol>
         </nav>
@@ -254,9 +256,9 @@
 
         <div class="section bg-transparent" style="margin: 50vh 0;">
           <div class="text-center small text-body opacity-50">
-            <div>2026 &copy; <a href="https://wolimp.com.br/" style="color:inherit!important;">Wolimp</a>, All Rights
-              Reserved</div>
-            <small>Ehecoatl&trade; is a trademark owned by Wolimp company.</small>
+            <div>
+              <%= new Date().getFullYear() %> &copy; <%= it.title %>
+            </div>
             <div class="small mb-0 text-body">
               Special thanks to
               <a style="color:inherit!important;" href="https://getbootstrap.com/" target="_blank"
@@ -277,6 +279,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/json.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/html.min.js"></script>
   <script> hljs.highlightAll(); </script>
   <!-- SYNC SCRIPTS -->
 

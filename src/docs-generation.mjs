@@ -59,9 +59,12 @@ async function copyDocumentationAssets(source, destination) {
 }
 
 /** Build static HTML for docsPath/<version>/*.md into outputPath. */
-export async function buildDocs({ docsPath, outputPath = "dist", baseURL, title = "Documentation", themePath = null } = {}) {
+export async function buildDocs({ docsPath, outputPath = "dist", baseURL, title = "Documentation", themePath = null, viewVariables = {} } = {}) {
   if (typeof docsPath !== "string" || !docsPath.trim()) throw new TypeError("docsPath is required");
   if (typeof outputPath !== "string" || !outputPath.trim()) throw new TypeError("outputPath must be a directory path");
+  if (viewVariables === null || typeof viewVariables !== "object" || Array.isArray(viewVariables)) {
+    throw new TypeError("viewVariables must be an object");
+  }
   const sourceRoot = path.resolve(docsPath);
   const outputRoot = path.resolve(outputPath);
   const sourceStat = await fsp.stat(sourceRoot);
@@ -102,6 +105,7 @@ export async function buildDocs({ docsPath, outputPath = "dist", baseURL, title 
     const contentHtml = marked.parse(rewriteMarkdownLinks(markdown));
     const pageURL = baseURL ? new URL(page.targetPath.replace(/^\/+/, ""), `${baseURL.replace(/\/+$/, "")}/`).href : "";
     const data = {
+      ...viewVariables,
       ...view,
       menuTree: rewriteTree(view.menuTree),
       breadcrumb: view.breadcrumb.map((item) => ({ ...item, href: htmlHref(item.href) })),

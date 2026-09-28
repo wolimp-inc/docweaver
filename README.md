@@ -65,9 +65,15 @@ O build gera `public/v1/index.htm`, páginas internas em `.htm`, copia arquivos 
 await buildDocs({
   docsPath: "./docs",
   outputPath: "./public",
-  themePath: "./meu-tema"
+  themePath: "./meu-tema",
+  viewVariables: {
+    organization: "Minha empresa",
+    links: { home: "https://exemplo.com" }
+  }
 });
 ```
+
+As propriedades de `viewVariables` ficam disponíveis diretamente em `it` em todas as páginas do template. Por exemplo, use `<%= it.organization %>` e `<%= it.links.home %>`. Os valores internos do Docweaver, como `title`, `contentHtml` e `version`, têm precedência em caso de nomes repetidos.
 
 Para obter o descritor de uma página sem executar o build completo, `generate` aceita o mesmo `themePath`:
 

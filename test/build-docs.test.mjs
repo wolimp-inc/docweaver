@@ -24,6 +24,8 @@ test("buildDocs generates importable static docs and uses the default theme", as
     assert.equal(result.pages.length, 2);
     const home = await fsp.readFile(path.join(outputPath, "v1", "index.htm"), "utf8");
     assert.match(home, /<h1>Welcome<\/h1>/);
+    assert.match(home, /href="\/v1\/index\.htm"[^>]*>\s*Test\s*<\/a>/);
+    assert.doesNotMatch(home, /ehecoatl/i);
     assert.match(home, /guide\/start\.htm/);
     assert.match(home, /\/assets\/docweaver\/css\/inline-style\.css/);
     assert.match(await fsp.readFile(path.join(outputPath, "v1", "guide", "start.htm"), "utf8"), /<strong>Ready<\/strong>/);
@@ -42,11 +44,21 @@ test("generate accepts a custom template file", async () => {
     await fsp.mkdir(path.join(docsPath, "v1"), { recursive: true });
     await fsp.writeFile(path.join(docsPath, "v1", "README.md"), "# Custom");
     await fsp.writeFile(path.join(docsPath, "v1", "summary.json"), JSON.stringify({ summary: [] }));
-    await fsp.writeFile(template, "<html><body><%~ it.contentHtml %></body></html>");
+    await fsp.writeFile(template, "<html><body><h2><%= it.organization %></h2><a href=\"<%= it.links.home %>\">Home</a><span><%= it.title %></span><%~ it.contentHtml %></body></html>");
     const page = await generate({ docsPath, version: "v1", title: "Test", themePath: template });
     assert.equal(page.render.template, template);
-    await buildDocs({ docsPath, outputPath: path.join(root, "public"), themePath: template });
-    assert.match(await fsp.readFile(path.join(root, "public", "v1", "index.htm"), "utf8"), /<h1>Custom<\/h1>/);
+    await buildDocs({
+      docsPath,
+      outputPath: path.join(root, "public"),
+      themePath: template,
+      title: "My Docs",
+      viewVariables: { organization: "Example Co", links: { home: "https://example.com" }, title: "Ignored override" }
+    });
+    const html = await fsp.readFile(path.join(root, "public", "v1", "index.htm"), "utf8");
+    assert.match(html, /<h1>Custom<\/h1>/);
+    assert.match(html, /<h2>Example Co<\/h2>/);
+    assert.match(html, /href="https:\/\/example\.com"/);
+    assert.match(html, /<span>My Docs<\/span>/);
   } finally {
     await fsp.rm(root, { recursive: true, force: true });
   }
