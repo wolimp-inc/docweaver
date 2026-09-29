@@ -2,7 +2,7 @@ import fsp from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { Eta } from "eta";
-import { marked } from "marked";
+import { Marked } from "marked";
 import { generateDocs, resolveTemplate, sitemap } from "./index.mjs";
 
 const defaultTheme = path.resolve(fileURLToPath(new URL("../themes/default/", import.meta.url)));
@@ -13,20 +13,57 @@ function htmlHref(href) {
     .replace(/\.md(?=([?#]|$))/i, ".htm");
 }
 
-function rewriteTree(items) {
+function normalizePublicPath(publicPath) {
+  if (typeof publicPath !== "string") throw new TypeError("publicPath must be a string");
+  const normalized = publicPath.trim().replace(/\/+$/, "");
+  if (normalized && (!normalized.startsWith("/") || normalized.startsWith("//") || normalized.includes("?") || normalized.includes("#"))) {
+    throw new TypeError("publicPath must be an absolute URL path, such as /core/docs");
+  }
+  return normalized;
+}
+
+function withPublicPath(href, publicPath) {
+  if (typeof href !== "string" || !href.startsWith("/") || href.startsWith("//")) return href;
+  if (publicPath && (href === publicPath || href.startsWith(`${publicPath}/`))) return href;
+  return `${publicPath}${href}`;
+}
+
+function pageHref(href, publicPath) {
+  return withPublicPath(htmlHref(href), publicPath);
+}
+
+function rewriteTree(items, publicPath) {
   return items.map((item) => ({
     ...item,
-    href: htmlHref(item.href),
-    children: rewriteTree(item.children ?? [])
+    href: pageHref(item.href, publicPath),
+    children: rewriteTree(item.children ?? [], publicPath)
   }));
 }
 
-function rewriteMarkdownLinks(markdown) {
-  return markdown.replace(/(!?\[[^\]]*\]\()([^\s)]+)(\))/g, (match, open, href, close) => {
-    if (open.startsWith("!") || /^(?:[a-z][a-z\d+.-]*:|\/\/|#)/i.test(href)) return match;
-    const target = htmlHref(href);
-    return `${open}${target}${close}`;
-  });
+function renderMarkdown(markdown, publicPath) {
+  const parser = new Marked();
+  parser.use({ walkTokens(token) {
+    if (token.type !== "link" || /^(?:[a-z][a-z\d+.-]*:|\/\/|#)/i.test(token.href)) return;
+    token.href = pageHref(token.href, publicPath);
+  } });
+  return parser.parse(markdown);
+}
+
+function structuredData({ title, pageTitle, pageURL }) {
+  const data = {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    headline: pageTitle,
+    description: title
+  };
+  if (pageURL) data.url = pageURL;
+  return JSON.stringify(data).replace(/</g, "\\u003c");
+}
+
+function normalizeFaviconPath(faviconPath) {
+  if (faviconPath == null || faviconPath === "") return null;
+  if (typeof faviconPath !== "string") throw new TypeError("faviconPath must be a string or null");
+  return faviconPath.replace(/\/+$/, "");
 }
 
 async function copyAssets(source, destination) {
@@ -59,12 +96,14 @@ async function copyDocumentationAssets(source, destination) {
 }
 
 /** Build static HTML for docsPath/<version>/*.md into outputPath. */
-export async function buildDocs({ docsPath, outputPath = "dist", baseURL, title = "Documentation", themePath = null, viewVariables = {} } = {}) {
+export async function buildDocs({ docsPath, outputPath = "dist", baseURL, title = "Documentation", themePath = null, viewVariables = {}, publicPath = "", faviconPath = null } = {}) {
   if (typeof docsPath !== "string" || !docsPath.trim()) throw new TypeError("docsPath is required");
   if (typeof outputPath !== "string" || !outputPath.trim()) throw new TypeError("outputPath must be a directory path");
   if (viewVariables === null || typeof viewVariables !== "object" || Array.isArray(viewVariables)) {
     throw new TypeError("viewVariables must be an object");
   }
+  const sitePath = normalizePublicPath(publicPath);
+  const iconsPath = normalizeFaviconPath(faviconPath);
   const sourceRoot = path.resolve(docsPath);
   const outputRoot = path.resolve(outputPath);
   const sourceStat = await fsp.stat(sourceRoot);
@@ -102,22 +141,30 @@ export async function buildDocs({ docsPath, outputPath = "dist", baseURL, title 
     const destination = path.join(outputRoot, ...targetPath.split("/"));
     const view = page.render.view;
     const markdown = await fsp.readFile(view.markdownPath, "utf8");
-    const contentHtml = marked.parse(rewriteMarkdownLinks(markdown));
+    const contentHtml = renderMarkdown(markdown, sitePath);
     const pageURL = baseURL ? new URL(page.targetPath.replace(/^\/+/, ""), `${baseURL.replace(/\/+$/, "")}/`).href : "";
     const data = {
       ...viewVariables,
       ...view,
-      menuTree: rewriteTree(view.menuTree),
-      breadcrumb: view.breadcrumb.map((item) => ({ ...item, href: htmlHref(item.href) })),
-      prevLink: view.prevLink && { ...view.prevLink, href: htmlHref(view.prevLink.href) },
-      nextLink: view.nextLink && { ...view.nextLink, href: htmlHref(view.nextLink.href) },
+      menuTree: rewriteTree(view.menuTree, sitePath),
+      breadcrumb: view.breadcrumb.map((item) => ({ ...item, href: pageHref(item.href, sitePath) })),
+      prevLink: view.prevLink && { ...view.prevLink, href: pageHref(view.prevLink.href, sitePath) },
+      nextLink: view.nextLink && { ...view.nextLink, href: pageHref(view.nextLink.href, sitePath) },
       contentHtml,
       pageURL,
-      outputPath: "/assets/docweaver",
+      outputPath: `${sitePath}/assets/docweaver`,
+      publicPath: sitePath,
+      homeHref: `${sitePath}/${targetPath.split("/")[0]}/index.htm`,
+      faviconPath: iconsPath,
       title,
       description: title,
       version: targetPath.split("/")[0],
-      versions
+      versions: versions.map((version) => ({ ...version, href: `${sitePath}/${version.name}/index.htm` })),
+      structuredDataJson: viewVariables.structuredDataJson == null
+        ? structuredData({ title, pageTitle: view.pageTitle, pageURL })
+        : typeof viewVariables.structuredDataJson === "string"
+          ? viewVariables.structuredDataJson
+          : JSON.stringify(viewVariables.structuredDataJson).replace(/</g, "\\u003c")
     };
     const html = eta.render(path.basename(page.render.template), data);
     await fsp.mkdir(path.dirname(destination), { recursive: true });

@@ -57,6 +57,23 @@ console.log(`Geradas ${result.pages.length} páginas em ${result.outputPath}`);
 
 O build gera `public/v1/index.htm`, páginas internas em `.htm`, copia arquivos de apoio da documentação e arquivos CSS/JS do tema para `public/assets/docweaver`. `baseURL` é opcional; quando informado, também gera `sitemap.xml`. Use a origem do site como `baseURL`, pois os links do tema são absolutos a partir da raiz do site.
 
+### Publicação em um subcaminho
+
+Use `publicPath` quando a documentação for servida em um subcaminho. Ele prefixa os links de assets, versões e navegação; os arquivos continuam sendo gravados diretamente em `outputPath`. `baseURL` deve incluir o mesmo subcaminho para gerar URLs canônicas e o sitemap.
+
+```js
+await buildDocs({
+  docsPath: "./docs",
+  outputPath: "./public",
+  title: "Minha documentação",
+  publicPath: "/core/docs",
+  baseURL: "https://exemplo.com/core/docs",
+  faviconPath: "/core/docs/icons"
+});
+```
+
+`faviconPath` é opcional e aponta para o diretório público que contém os arquivos de ícone usados pelo tema padrão. Sem ele, o template não inclui links para ícones. O gerador cria JSON-LD básico para cada página; para substituí-lo, passe `structuredDataJson` em `viewVariables` como objeto ou string JSON.
+
 ### Tema personalizado
 
 `themePath` aceita o diretório de um tema que contém `docs-layout.eta.htm` ou o caminho de um arquivo de template Eta. Quando `null` ou omitido, usa `themes/default` do próprio pacote.
