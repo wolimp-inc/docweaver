@@ -11,52 +11,51 @@
 
   <%~ include("./seo-head.eta.htm") %>
 
-    <% if (it.faviconPath !== null) { %>
-    <link rel="icon" type="image/svg+xml" sizes="any" href="<%= it.faviconPath %>/favicon.svg">
-    <link rel="icon" type="image/x-icon" sizes="any" href="<%= it.faviconPath %>/favicon.ico">
-    <link rel="icon" type="image/png" sizes="16x16" href="<%= it.faviconPath %>/favicon-16x16.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="<%= it.faviconPath %>/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="<%= it.faviconPath %>/android-chrome-192x192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="<%= it.faviconPath %>/android-chrome-512x512.png">
-    <link rel="apple-touch-icon" type="image/png" sizes="180x180"
-      href="<%= it.faviconPath %>/apple-touch-icon.png">
-    <% } %>
+    <% if (it.faviconPath !==null) { %>
+      <link rel="icon" type="image/svg+xml" sizes="any" href="<%= it.faviconPath %>/favicon.svg">
+      <link rel="icon" type="image/x-icon" sizes="any" href="<%= it.faviconPath %>/favicon.ico">
+      <link rel="icon" type="image/png" sizes="16x16" href="<%= it.faviconPath %>/favicon-16x16.png">
+      <link rel="icon" type="image/png" sizes="32x32" href="<%= it.faviconPath %>/favicon-32x32.png">
+      <link rel="icon" type="image/png" sizes="192x192" href="<%= it.faviconPath %>/android-chrome-192x192.png">
+      <link rel="icon" type="image/png" sizes="512x512" href="<%= it.faviconPath %>/android-chrome-512x512.png">
+      <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="<%= it.faviconPath %>/apple-touch-icon.png">
+      <% } %>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Geist:wght@500&display=swap" rel="stylesheet">
 
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.32.2/tocbot.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/css/bootstrap.min.css">
-    <link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css">
-    <link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
+        <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.32.2/tocbot.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/css/bootstrap.min.css">
+        <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css">
+        <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
 
-    <link rel="stylesheet" href="<%= it.outputPath %>/css/inline-style.css">
+        <link rel="stylesheet" href="<%= it.outputPath %>/css/inline-style.css">
 
-    <script>
-      function closeNavbar(bsToggler) {
-        const targetSelector = bsToggler.getAttribute('data-bs-target') ||
-          (bsToggler.getAttribute('aria-controls') ? `#${bsToggler.getAttribute('aria-controls')}` : null);
-        const bsCollapse = targetSelector ? document.querySelector(targetSelector) : null;
+        <script>
+          function closeNavbar(bsToggler) {
+            const targetSelector = bsToggler.getAttribute('data-bs-target') ||
+              (bsToggler.getAttribute('aria-controls') ? `#${bsToggler.getAttribute('aria-controls')}` : null);
+            const bsCollapse = targetSelector ? document.querySelector(targetSelector) : null;
 
-        // 2. If open, remove the 'show' class to hide it
-        if (bsCollapse?.classList.contains('show')) {
-          bsCollapse.classList.remove('show');
-          // 3. Update ARIA state to false
-          bsToggler.setAttribute('aria-expanded', 'false');
-        }
-      }
-      window.addEventListener("click", (e) => {
-        const link = e.target?.closest?.("a[href]");
-        const any = e.target?.closest?.("[data-bs-toggle][data-bs-continue]");
-        if (any && !link) return;
-        const el = document.querySelector("[data-bs-toggle][data-bs-autohide=true][aria-expanded=true]");
-        if (el) closeNavbar(el);
-      });
-    </script>
+            // 2. If open, remove the 'show' class to hide it
+            if (bsCollapse?.classList.contains('show')) {
+              bsCollapse.classList.remove('show');
+              // 3. Update ARIA state to false
+              bsToggler.setAttribute('aria-expanded', 'false');
+            }
+          }
+          window.addEventListener("click", (e) => {
+            const link = e.target?.closest?.("a[href]");
+            const any = e.target?.closest?.("[data-bs-toggle][data-bs-continue]");
+            if (any && !link) return;
+            const el = document.querySelector("[data-bs-toggle][data-bs-autohide=true][aria-expanded=true]");
+            if (el) closeNavbar(el);
+          });
+        </script>
 </head>
 
 <body>
@@ -68,8 +67,7 @@
 
         <div class="me-auto d-flex flex-row gap-2 align-items-center">
 
-          <a class="navbar-brand m-0 me-auto p-0 lh-1 fw-medium d-flex align-items-center"
-            href="<%= it.homeHref %>"
+          <a class="navbar-brand m-0 me-auto p-0 lh-1 fw-medium d-flex align-items-center" href="<%= it.homeHref %>"
             style="font-size:1.5em;letter-spacing:-0.03em;word-spacing: -.2em; color:inherit;">
             <%= it.title %>
           </a>
@@ -84,7 +82,7 @@
 
               <%~ include("./versions-menu.eta.htm") %>
 
-                <div class="btn-group border rounded-pill rounded overflow-hidden" style="gap:1px;" role="group"
+                <div class="btn-group border rounded-1 rounded overflow-hidden" style="gap:1px;" role="group"
                   aria-label="Basic example">
                   <input type="radio" class="btn-check" name="color-mode-selected" id="radio-color-mode-light"
                     autocomplete="off" aria-label="Light Mode">
@@ -117,7 +115,7 @@
             </div>
 
             <% for (const item of it.menuTree) { %>
-              <li class="nav-item small-md fw-bold rounded-pill ps-md-1 bg-light-adaptive" style="flex:0">
+              <li class="nav-item small-md fw-bold rounded-1 ps-md-1 bg-light-adaptive" style="flex:0">
                 <a class="nav-link text-capitalize p-2 p-md-1 px-3 px-md-2" data-bs-continue=true
                   data-bs-toggle="collapse" data-bs-target="#children-<%= item.slug %>">
                   <%= item.label %>
@@ -135,7 +133,7 @@
                     <% for (const child of item.children) { %>
                       <% if (child.children !==undefined && child.children.length) { %>
 
-                        <li class="nav-item small-md fw-bold rounded-pill ps-md-1 bg-light-adaptive" style="flex:0">
+                        <li class="nav-item small-md fw-bold rounded-1 ps-md-1 bg-light-adaptive" style="flex:0">
                           <a class="nav-link text-capitalize p-2 p-md-1 px-3 px-md-2" data-bs-continue=true
                             data-bs-toggle="collapse" data-bs-target="#children2-<%= child.slug %>">
                             <%= child.label %>
@@ -150,8 +148,7 @@
                           data-bs-parent="#children-<%= item.slug %>">
                           <div class="ps-2 gap-1 d-flex flex-column ">
                             <% for (const child2 of child.children) { %>
-                              <li
-                                class="nav-item small-md rounded-pill ps-md-1 <% if (child2.active) { %> active <% } %>"
+                              <li class="nav-item small-md rounded-1 ps-md-1 <% if (child2.active) { %> active <% } %>"
                                 style="flex:0">
                                 <a class="nav-link text-capitalize p-2 p-md-1 px-3 px-md-2" href="<%= child2.href %>">
                                   <%= child2.label %>
@@ -161,7 +158,7 @@
                           </div>
                         </div>
                         <% } else { %>
-                          <li class="nav-item small-md rounded-pill ps-md-1 <% if (child.active) { %> active <% } %>"
+                          <li class="nav-item small-md rounded-1 ps-md-1 <% if (child.active) { %> active <% } %>"
                             style="flex:0">
                             <a class="nav-link text-capitalize p-2 p-md-1 px-3 px-md-2" href="<%= child.href %>">
                               <%= child.label %>
@@ -200,7 +197,7 @@
       <div class=" toc-header position-relative bg-white p-2 position-sticky border-bottom border-md-0"
         style="top:64px;z-index:1;">
         <div class="menu-toggle d-flex flex-row gap-2 small">
-          <button id="button-toc-menu" class="btn btn-sm btn-outline-adaptive rounded-pill px-3 text-nowrap"
+          <button id="button-toc-menu" class="btn btn-sm btn-outline-adaptive rounded-1 px-3 text-nowrap"
             data-bs-autohide="true" data-bs-toggle="collapse" data-bs-target="#toc-collapse" aria-expanded="false"
             aria-controls="toc-collapse">
             Table of Contents
