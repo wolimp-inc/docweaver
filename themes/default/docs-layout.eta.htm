@@ -25,37 +25,8 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Geist:wght@500&display=swap" rel="stylesheet">
 
-        <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.32.2/tocbot.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/css/bootstrap.min.css">
-        <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css">
-        <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
+        <%~ include("./js-head.eta.htm") %>
 
-        <link rel="stylesheet" href="<%= it.outputPath %>/css/inline-style.css">
-
-        <script>
-          function closeNavbar(bsToggler) {
-            const targetSelector = bsToggler.getAttribute('data-bs-target') ||
-              (bsToggler.getAttribute('aria-controls') ? `#${bsToggler.getAttribute('aria-controls')}` : null);
-            const bsCollapse = targetSelector ? document.querySelector(targetSelector) : null;
-
-            // 2. If open, remove the 'show' class to hide it
-            if (bsCollapse?.classList.contains('show')) {
-              bsCollapse.classList.remove('show');
-              // 3. Update ARIA state to false
-              bsToggler.setAttribute('aria-expanded', 'false');
-            }
-          }
-          window.addEventListener("click", (e) => {
-            const link = e.target?.closest?.("a[href]");
-            const any = e.target?.closest?.("[data-bs-toggle][data-bs-continue]");
-            if (any && !link) return;
-            const el = document.querySelector("[data-bs-toggle][data-bs-autohide=true][aria-expanded=true]");
-            if (el) closeNavbar(el);
-          });
-        </script>
 </head>
 
 <body>
@@ -82,35 +53,7 @@
 
               <%~ include("./versions-menu.eta.htm") %>
 
-                <div class="btn-group border rounded-1 rounded overflow-hidden" style="gap:1px;" role="group"
-                  aria-label="Basic example">
-                  <input type="radio" class="btn-check" name="color-mode-selected" id="radio-color-mode-light"
-                    autocomplete="off" aria-label="Light Mode">
-                  <label
-                    class="btn btn-sm btn-outline-adaptive py-1 border-0 d-inline-flex justify-content-center align-items-center"
-                    for="radio-color-mode-light" onclick aria-label="Light Mode">
-                    <i class="bi bi-sun"></i>
-                    <span class="visually-hidden">Light Mode</span>
-                  </label>
-
-                  <input type="radio" class="btn-check" name="color-mode-selected" id="radio-color-mode-dark"
-                    autocomplete="off" aria-label="Dark Mode">
-                  <label
-                    class="btn btn-sm btn-outline-adaptive py-1 border-0  d-inline-flex justify-content-center align-items-center"
-                    for="radio-color-mode-dark" onclick aria-label="Dark Mode">
-                    <i class="bi bi-moon-fill"></i>
-                    <span class="visually-hidden">Dark Mode</span>
-                  </label>
-
-                  <input type="radio" class="btn-check" name="color-mode-selected" id="radio-color-mode-auto"
-                    autocomplete="off" aria-label="Auto Mode">
-                  <label
-                    class="btn btn-sm btn-outline-adaptive py-1 border-0 d-inline-flex justify-content-center align-items-center"
-                    for="radio-color-mode-auto" onclick aria-label="Auto Mode">
-                    <i class="bi bi-circle-half"></i>
-                    <span class="visually-hidden">Auto Mode</span>
-                  </label>
-                </div>
+              <%~ include("./color-scheme-menu.eta.htm") %>
 
             </div>
 
@@ -273,44 +216,7 @@
 
   </div>
 
-  <!-- SYNC SCRIPTS -->
-  <script src="<%= it.outputPath %>/js/promise-value.js?t=1"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/json.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/html.min.js"></script>
-  <script> hljs.highlightAll(); </script>
-  <!-- SYNC SCRIPTS -->
 
-  <!-- ASYNC SCRIPTS -->
-  <script src="<%= it.outputPath %>/js/bootstrap-ajax-loader.js?t=1" async></script>
-  <script src="<%= it.outputPath %>/js/toc-init.js?t=1" async></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/js/bootstrap.bundle.min.js" defer async></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.32.2/tocbot.min.js" defer async></script>
-
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      promise_value(window, "initOrRefreshToc")
-        .then(initOrRefreshToc => initOrRefreshToc());
-    });
-
-    window.addEventListener("BootstrapAjaxStart", (e) => {
-      const container = document.querySelector("#doc-content");
-      container.style.transition = null;
-      container.style.opacity = .2;
-    });
-
-    window.addEventListener("BootstrapAjaxLoaded", (e) => {
-      const container = document.querySelector("#doc-content");
-      container.style.transition = "opacity .25s linear";
-      container.style.opacity = null;
-
-      initOrRefreshToc();
-      hljs.highlightAll();
-    });
-  </script>
-  <!-- ASYNC SCRIPTS -->
 
 </body>
 

@@ -1,6 +1,6 @@
 {
   "name": "@wolimp/docweaver",
-  "version": "0.1.0-beta.2",
+  "version": "0.1.0-beta.4",
   "description": "Build static documentation from versioned Markdown directories",
   "type": "module",
   "exports": {

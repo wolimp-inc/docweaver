@@ -1,0 +1,13 @@
+{
+  "explorer.compactFolders": false,
+  "explorer.fileNesting.enabled": true,
+  "files.associations": {
+    "*.eta.htm": "eta"
+  },
+  "emmet.includeLanguages": {
+    "eta": "html"
+  },
+  "[eta]": {
+    "editor.formatOnSave": false
+  }
+}

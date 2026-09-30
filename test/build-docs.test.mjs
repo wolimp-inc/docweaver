@@ -30,7 +30,8 @@ test("buildDocs generates importable static docs and uses the default theme", as
     assert.doesNotMatch(home, /<link rel="icon"/);
     assert.match(home, /guide\/start\.htm/);
     assert.match(home, /\/assets\/docweaver\/css\/inline-style\.css/);
-    const navbarScript = home.match(/<script>([\s\S]*?)<\/script>/)?.[1];
+    const inlineScripts = [...home.matchAll(/<script>([\s\S]*?)<\/script>/g)].map((match) => match[1]);
+    const navbarScript = inlineScripts.find((script) => script.includes("function closeNavbar"));
     let onClick;
     let collapsed = false;
     const toggler = {
@@ -38,8 +39,9 @@ test("buildDocs generates importable static docs and uses the default theme", as
       setAttribute(name, value) { if (name === "aria-expanded" && value === "false") collapsed = true; }
     };
     vm.runInNewContext(navbarScript, {
-      window: { addEventListener(name, handler) { if (name === "click") onClick = handler; } },
+      AelluxJs: { init() {} },
       document: {
+        addEventListener(name, handler) { if (name === "click") onClick = handler; },
         querySelector(selector) {
           if (selector === "[data-bs-toggle][data-bs-autohide=true][aria-expanded=true]") return toggler;
           if (selector === "#navigation") return { classList: { contains: () => true, remove: () => {} } };
