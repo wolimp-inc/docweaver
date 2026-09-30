@@ -8,6 +8,6 @@
     "eta": "html"
   },
   "[eta]": {
-    "editor.formatOnSave": false
+    "editor.formatOnSave": true
   }
 }
