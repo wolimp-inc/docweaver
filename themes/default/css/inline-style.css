@@ -397,3 +397,32 @@ h3::before {
   margin-top: -150px;
   visibility: hidden;
 }
+
+table {
+  max-width: 100%;
+  width: 100%;
+}
+
+.table-scroll-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  /* Smooth scrolling on iOS devices */
+  margin-bottom: 1.5rem;
+  /* Optional layout spacing */
+  border-top: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
+  border-bottom: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
+  border-radius: var(--bs-border-radius-sm) !important;
+}
+
+.table-scroll-wrapper table th {
+  background-color: rgba(var(--bs-body-color-rgb), 5%);
+}
+
+.table-scroll-wrapper table th,
+.table-scroll-wrapper table td {
+  white-space: nowrap;
+  padding: 0.5rem;
+  border-inline-start: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
+  border-inline-end: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
+}

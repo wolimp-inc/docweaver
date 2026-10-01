@@ -7,8 +7,8 @@
 
 <link rel="stylesheet" href="<%= it.outputPath %>/css/inline-style.css">
 
-<script src="https://cdn.jsdelivr.net/npm/tocbot@4.36/dist/tocbot.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3/dist/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tocbot@4.32/dist/tocbot.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11.12/highlight.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11.12/languages/html.min.js"></script>
@@ -18,14 +18,18 @@
 
 <script src="<%= it.outputPath %>/js/toc-init.js?t=1"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/@aelluxjs/core@0.1.0-beta.4/dist/aellux.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@aelluxjs/core@0.1.0-beta.6/dist/aellux.min.js"></script>
 <script>
   AelluxJs.init({ mode: "full" });
 
-  document.addEventListener("AelluxJsUpdate",
+  document.addEventListener("AelluxJsMount",
     (event) => {
       initOrRefreshToc();
-      hljs.highlightAll();
+
+      document.querySelectorAll('pre code:not([data-highlighted])')
+        .forEach((block) => {
+          hljs.highlightElement(block);
+        });
 
       const ajaxAttr = AelluxJs.attr("ajax-href");
       const linksToUpdate = [
@@ -37,26 +41,36 @@
         if(link.getAttribute("href")?.startsWith("#")) return;
         link.setAttribute(
           ajaxAttr,
-          "#doc-content,#doc-navlinks,#doc-breadcrumb"
+          "#doc-content,#doc-navlinks,#doc-navlinks2,#doc-breadcrumb"
           );
+      });
+      document.querySelectorAll("table").forEach((table) => {
+        if (table.parentElement &&
+          table.parentElement.classList.contains("table-scroll-wrapper")) {
+          return;
+        }
+        const wrapper = document.createElement("div");
+        wrapper.classList.add("table-scroll-wrapper");
+        table.parentNode.insertBefore(wrapper, table);
+        wrapper.appendChild(table);
       });
     }
   );
 
-  document.addEventListener("AelluxJsAjaxStart",
+  document.addEventListener("AelluxJsAjaxHrefStart",
     (e) => {
       const container = document.querySelector("#doc-content");
       container.style.transition = null;
       container.style.opacity = .2;
+      setNavActiveByUrl(window.location.href);
     }
   );
 
-  document.addEventListener("AelluxJsAjaxLoaded",
+  document.addEventListener("AelluxJsAjaxHrefLoaded",
     (e) => {
       const container = document.querySelector("#doc-content");
       container.style.transition = "opacity .25s linear";
       container.style.opacity = null;
-      setNavActiveByUrl(window.location.href);
     }
   );
 
@@ -85,14 +99,11 @@
 
   function comparableUrl(value) {
     const url = new URL(value, window.location.href);
-
-    // Match by path + query, ignoring hash
     return `${url.origin}${url.pathname}${url.search}`;
   }
 
   function setNavActiveByUrl(url) {
     const target = comparableUrl(url);
-
     document.querySelectorAll(".nav-link[href]").forEach((link) => {
       const linkUrl = comparableUrl(link.href);
       const navItem = link.closest(".nav-item");
@@ -123,8 +134,8 @@
     const progressBar = document.querySelector("#page-progress");
     let progressTimer = null, progressTimer1 = null, progressTimer2 = null;
 
-  document.addEventListener("AelluxJsAjaxStart",startProgress)
-  document.addEventListener("AelluxJsAjaxComplete",finishProgress)
+  document.addEventListener("AelluxJsAjaxHrefStart",startProgress)
+  document.addEventListener("AelluxJsAjaxHrefComplete",finishProgress)
 
     function startProgress() {
       if (!progressBar) return;
